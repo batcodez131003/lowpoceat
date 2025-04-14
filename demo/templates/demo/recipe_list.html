@@ -1,0 +1,685 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Explorer - LowPoceat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Gothic+A1:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            /* Light Theme - Ragin Beige Palette */
+            --primary-color: #FF5E6C; /* Coral Pink */
+            --secondary-color: #FFAAAB; /* Pink Leaf */
+            --accent-color: #FEB300; /* Sleuthe Yellow */
+            --background-dark: #FFF5D7; /* Ragin Beige */
+            --background-light: #FFFFFF; /* Pure White */
+            --text-dark: #2A2A2A; /* Dark Gray */
+            --text-light: #5A5A5A; /* Medium Gray */
+            --navbar-background: #FFFFFF; /* White */
+            --gradient-soft: linear-gradient(135deg, #FF5E6C 0%, #FEB300 100%);
+            --shadow-glow: 0 8px 25px rgba(255, 94, 108, 0.2);
+            --border-radius: 20px;
+            --navbar-height: 80px;
+        }
+
+        .dark-mode {
+            /* Dark Theme - Darkest Black */
+            --primary-color: #FF5E6C;
+            --secondary-color: #FFAAAB;
+            --accent-color: #FEB300;
+            --background-dark: #000000; /* Darkest Black */
+            --background-light: #1A1A1A; /* Slightly lighter black */
+            --text-dark: #FFF5D7;
+            --text-light: #C2C2C2;
+            --navbar-background: #333333; /* Dark Gray */
+            --gradient-soft: linear-gradient(135deg, #FF5E6C 0%, #FEB300 100%);
+            --shadow-glow: 0 8px 25px rgba(255, 94, 108, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.5s ease;
+        }
+
+        body {
+            font-family: 'Gothic A1', sans-serif;
+            background: var(--background-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: -20%;
+            width: 140%;
+            height: 140%;
+            background: linear-gradient(45deg, rgba(255, 94, 108, 0.1), rgba(254, 179, 0, 0.1));
+            animation: shift 20s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        .dark-mode::before {
+            background: linear-gradient(45deg, rgba(255, 94, 108, 0.2), rgba(254, 179, 0, 0.2));
+        }
+
+        @keyframes shift {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10%, 10%); }
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 60px;
+            background: var(--navbar-background);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            height: var(--navbar-height);
+        }
+
+        .navbar.scrolled {
+            padding: 15px 60px;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .navbar .logo {
+            width: 160px;
+            background: transparent;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 1rem;
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: var(--accent-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-links a:hover::after {
+            width: 60%;
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 28px;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        .dark-mode-toggle {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            color: var(--text-dark);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .dark-mode-toggle:hover {
+            background: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .dark-mode .dark-mode-toggle {
+            background: var(--accent-color);
+            color: var(--text-light);
+        }
+
+        /* Container */
+        .container {
+            width: 90%;
+            max-width: 1300px;
+            margin: calc(var(--navbar-height) + 20px) auto 40px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-glow);
+            backdrop-filter: blur(12px);
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .dark-mode .container {
+            background: rgba(26, 26, 26, 0.9);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-color);
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 6vw, 2.5rem);
+            font-weight: 700;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filters select {
+            padding: 12px 16px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            background: var(--background-light);
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-family: 'Gothic A1', sans-serif;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .filters select {
+            background: var(--background-dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .filters select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 12px rgba(254, 179, 0, 0.5);
+        }
+
+        /* Custom Slider */
+        .slider-container {
+            position: relative;
+            width: 200px;
+            display: flex;
+            align-items: center;
+        }
+
+        .filters input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: var(--gradient-soft);
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .filters input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+
+        .dark-mode .filters input[type="range"]::-webkit-slider-thumb {
+            background: var(--accent-color);
+        }
+
+        .slider-tooltip {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            color: var(--text-dark);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .dark-mode .slider-tooltip {
+            background: var(--secondary-color);
+            color: var(--text-light);
+        }
+
+        .filters input[type="range"]:hover + .slider-tooltip,
+        .filters input[type="range"]:focus + .slider-tooltip {
+            opacity: 1;
+        }
+
+        .meal-type-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-glow);
+            backdrop-filter: blur(10px);
+        }
+
+        .dark-mode .meal-type-buttons {
+            background: rgba(26, 26, 26, 0.8);
+        }
+
+        .meal-type-buttons button {
+            padding: 12px 25px;
+            background: var(--primary-color);
+            color: var(--text-dark);
+            border: none;
+            border-radius: 12px;
+            font-family: 'Gothic A1', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 -2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .meal-type-buttons button {
+            color: var(--text-light);
+        }
+
+        .meal-type-buttons button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .meal-type-buttons button:hover::before {
+            width: 200%;
+            height: 200%;
+        }
+
+        .meal-type-buttons button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .meal-type-buttons button.active {
+            background: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .recipe-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-glow);
+            backdrop-filter: blur(8px);
+        }
+
+        .dark-mode .recipe-list {
+            background: rgba(26, 26, 26, 0.7);
+        }
+
+        .recipe-item {
+            background: var(--background-light);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+            animation: cardFadeIn 0.5s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .recipe-item {
+            background: var(--background-dark);
+        }
+
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .recipe-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(255, 94, 108, 0.3);
+        }
+
+        .dark-mode .recipe-item:hover {
+            box-shadow: 0 15px 35px rgba(255, 94, 108, 0.4);
+        }
+
+        .recipe-item a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
+            display: block;
+            padding: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .dark-mode .recipe-item a {
+            color: var(--text-dark);
+        }
+
+        .recipe-item a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--navbar-background);
+                padding: 20px;
+                text-align: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .container {
+                width: 95%;
+                padding: 30px;
+                margin: calc(var(--navbar-height) + 10px) auto 30px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .filters {
+                justify-content: center;
+            }
+
+            .meal-type-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .meal-type-buttons button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            .slider-container {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <img src="{% static 'demo/images/loogo.png' %}" alt="Logo" class="logo">
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'signup' %}">Sign Up</a>
+            <a href="{% url 'feedback_page' %}">Feedback</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+            <button class="dark-mode-toggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+        <div class="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Container -->
+    <div class="container">
+        <div class="header">
+            <h1>Recipe Explorer</h1>
+            <div class="filters">
+                <select id="diet-filter">
+                    <option value="">All Diets</option>
+                    <option value="vegan">Vegan</option>
+                    <option value="vegetarian">Vegetarian</option>
+                    <option value="non-vegetarian">Non-Vegetarian</option>
+                </select>
+                <select id="health-condition-filter">
+                    <option value="">All Health Conditions</option>
+                    {% for condition in health_conditions %}
+                        <option value="{{ condition.name }}">{{ condition.name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="slider-container">
+                    <input type="range" id="budget-slider" min="0" max="100" step="1" value="100">
+                    <span class="slider-tooltip">₹100</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="meal-type-buttons">
+            <button onclick="filterMeals('Breakfast')">Breakfast</button>
+            <button onclick="filterMeals('Lunch')">Lunch</button>
+            <button onclick="filterMeals('Dinner')">Dinner</button>
+        </div>
+
+        <div class="recipe-list" id="recipe-list">
+            {% for meal in meals %}
+                <div class="recipe-item" 
+                     data-meal-type="{{ meal.meal_type }}" 
+                     data-diet="{{ meal.diet_suitability }}" 
+                     data-health-condition="{{ meal.health_condition_suitability.all|join:',' }}" 
+                     data-cost="{{ meal.total_cost }}">
+                    <a href="{% url 'recipe_detail' meal.id %}">{{ meal.name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function applyFilters() {
+            const dietFilter = document.getElementById('diet-filter').value.toLowerCase();
+            const healthConditionFilter = document.getElementById('health-condition-filter').value.toLowerCase();
+            const budgetValue = document.getElementById('budget-slider').value;
+            const recipes = document.querySelectorAll('.recipe-item');
+            const sliderTooltip = document.querySelector('.slider-tooltip');
+            sliderTooltip.textContent = `₹${budgetValue}`;
+
+            const selectedMealTypeButton = document.querySelector('.meal-type-buttons button.active');
+            const mealTypeFilter = selectedMealTypeButton ? selectedMealTypeButton.textContent : '';
+
+            recipes.forEach(recipe => {
+                const dietSuitability = recipe.getAttribute('data-diet').toLowerCase();
+                const healthConditions = recipe.getAttribute('data-health-condition').toLowerCase().split(',');
+                const cost = parseFloat(recipe.getAttribute('data-cost'));
+                const recipeMealType = recipe.getAttribute('data-meal-type').toLowerCase();
+
+                const dietMatch = dietFilter === '' || dietSuitability === dietFilter;
+                const healthConditionMatch = healthConditionFilter === '' || healthConditions.includes(healthConditionFilter);
+                const budgetMatch = cost <= budgetValue;
+                const mealTypeMatch = mealTypeFilter === '' || recipeMealType === mealTypeFilter.toLowerCase();
+
+                recipe.style.display = (dietMatch && healthConditionMatch && budgetMatch && mealTypeMatch) ? 'block' : 'none';
+            });
+
+            // Update tooltip position
+            const slider = document.getElementById('budget-slider');
+            const thumbWidth = 24; // Width of the thumb
+            const sliderWidth = slider.offsetWidth;
+            const min = parseInt(slider.min);
+            const max = parseInt(slider.max);
+            const value = parseInt(slider.value);
+            const position = ((value - min) / (max - min)) * (sliderWidth - thumbWidth) + (thumbWidth / 2);
+            sliderTooltip.style.left = `${position}px`;
+        }
+
+        function filterMeals(mealType) {
+            const buttons = document.querySelectorAll('.meal-type-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+            event.target.classList.add('active');
+            applyFilters();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const isDarkModeEnabled = localStorage.getItem('darkMode') === 'enabled';
+            applyDarkMode(isDarkModeEnabled);
+
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            const darkModeToggle = document.querySelector('.dark-mode-toggle');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', () => {
+                    const isDark = !document.body.classList.contains('dark-mode');
+                    applyDarkMode(isDark);
+                });
+            }
+
+            document.getElementById('diet-filter').addEventListener('change', applyFilters);
+            document.getElementById('health-condition-filter').addEventListener('change', applyFilters);
+            const budgetSlider = document.getElementById('budget-slider');
+            budgetSlider.addEventListener('input', () => {
+                applyFilters();
+                updateTooltipPosition();
+            });
+
+            applyFilters();
+        });
+
+        function applyDarkMode(isDark) {
+            const body = document.body;
+            const toggleButton = document.querySelector('.dark-mode-toggle');
+            if (isDark) {
+                body.classList.add('dark-mode');
+                if (toggleButton) toggleButton.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                body.classList.remove('dark-mode');
+                if (toggleButton) toggleButton.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+            applyFilters();
+        }
+
+        function updateTooltipPosition() {
+            const slider = document.getElementById('budget-slider');
+            const tooltip = document.querySelector('.slider-tooltip');
+            const thumbWidth = 24;
+            const sliderWidth = slider.offsetWidth;
+            const min = parseInt(slider.min);
+            const max = parseInt(slider.max);
+            const value = parseInt(slider.value);
+            const position = ((value - min) / (max - min)) * (sliderWidth - thumbWidth) + (thumbWidth / 2);
+            tooltip.style.left = `${position}px`;
+        }
+    </script>
+</body>
+</html>
