@@ -19,38 +19,42 @@ from .forms import FeedbackForm
 def signup_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
+        print("Form errors:", form.errors)  # temp debug - check terminal
         if form.is_valid():
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password1 = form.cleaned_data['password1']
             password2 = form.cleaned_data['password2']
 
-            # Check if passwords match
             if password1 != password2:
                 messages.error(request, "Passwords do not match!")
-                return redirect('signup')
+                return render(request, 'demo/signup.html', {'form': form})
 
-            # Check if the email is already in use
             if User.objects.filter(email=email).exists():
                 messages.error(request, "Email is already registered!")
-                return redirect('signup')
+                return render(request, 'demo/signup.html', {'form': form})
 
-            # Create and save user
             user = User.objects.create_user(username=username, email=email, password=password1)
-            user.is_active = False  # Deactivate account till it is confirmed
+            user.is_active = False
             user.save()
 
-            # Generate and send OTP
             otp = generate_otp()
             EmailVerificationCode.objects.create(user=user, code=otp)
-            send_otp_email(user, otp)
+            try:
+                send_otp_email(user, otp)
+            except Exception:
+                user.delete()
+                messages.error(request, "Unable to send verification email. Please check your email settings and try again.")
+                return render(request, 'demo/signup.html', {'form': form})
 
             request.session['user_id'] = user.id
             return redirect('verify_otp')
+        else:
+            # Show errors on same page, don't redirect
+            return render(request, 'demo/signup.html', {'form': form})
     else:
         form = SignUpForm()
     return render(request, 'demo/signup.html', {'form': form})
-
 def verify_otp(request):
     if request.method == 'POST':
         otp = request.POST.get('otp')
