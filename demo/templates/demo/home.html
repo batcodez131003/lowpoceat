@@ -11,16 +11,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
     <style>
         :root {
-            /* Light Theme - Ragin Beige Palette */
-            --primary-color: #FF5E6C; /* Coral Pink */
-            --secondary-color: #FFAAAB; /* Pink Leaf */
-            --accent-color: #FEB300; /* Sleuthe Yellow */
-            --background-dark: #FFF5D7; /* Ragin Beige */
-            --background-light: #FFFFFF; /* Pure White */
-            --text-dark: #2A2A2A; /* Dark Gray for contrast */
-            --text-light: #5A5A5A; /* Medium Gray */
-            --hero-background: #FFF8E8; /* Softer beige for hero */
-            --navbar-background: #FFFFFF; /* White for navbar */
+            --primary-color: #FF5E6C;
+            --secondary-color: #FFAAAB;
+            --accent-color: #FEB300;
+            --background-dark: #FFF5D7;
+            --background-light: #FFFFFF;
+            --text-dark: #2A2A2A;
+            --text-light: #5A5A5A;
+            --hero-background: #FFF8E8;
+            --navbar-background: #FFFFFF;
             --gradient-soft: linear-gradient(135deg, #FF5E6C 0%, #FEB300 100%);
             --shadow-glow: 0 8px 25px rgba(255, 94, 108, 0.2);
             --border-radius: 20px;
@@ -28,16 +27,15 @@
         }
 
         .dark-mode {
-            /* Dark Theme - Darkest Black */
-            --primary-color: #FF5E6C; /* Coral Pink */
-            --secondary-color: #FFAAAB; /* Pink Leaf */
-            --accent-color: #FEB300; /* Sleuthe Yellow */
-            --background-dark: #000000; /* Darkest Black */
-            --background-light: #1A1A1A; /* Slightly lighter black for contrast */
-            --text-dark: #FFF5D7; /* Ragin Beige as text */
-            --text-light: #C2C2C2; /* Light Gray */
-            --hero-background: #1A1A1A; /* Slightly lighter black for hero */
-            --navbar-background: #333333; /* Distinct darker gray for navbar */
+            --primary-color: #FF5E6C;
+            --secondary-color: #FFAAAB;
+            --accent-color: #FEB300;
+            --background-dark: #000000;
+            --background-light: #1A1A1A;
+            --text-dark: #FFF5D7;
+            --text-light: #C2C2C2;
+            --hero-background: #1A1A1A;
+            --navbar-background: #333333;
             --gradient-soft: linear-gradient(135deg, #FF5E6C 0%, #FEB300 100%);
             --shadow-glow: 0 8px 25px rgba(255, 94, 108, 0.3);
         }
@@ -57,13 +55,12 @@
             overflow-x: hidden;
         }
 
-        /* Navbar */
         .navbar {
             position: fixed;
             top: 0;
             width: 100%;
             padding: 20px 60px;
-            background: var(--navbar-background); /* White in light mode */
+            background: var(--navbar-background);
             backdrop-filter: blur(12px);
             display: flex;
             justify-content: space-between;
@@ -80,11 +77,10 @@
 
         .navbar .logo {
             width: 160px;
-            background: transparent; /* Ensure no background */
+            background: transparent;
             transition: transform 0.3s ease;
         }
 
-        /* Removed filter to keep logo's native color in dark mode */
         .navbar .logo:hover {
             transform: scale(1.05);
         }
@@ -118,13 +114,8 @@
             transform: translateX(-50%);
         }
 
-        .nav-links a:hover {
-            color: var(--accent-color);
-        }
-
-        .nav-links a:hover::after {
-            width: 60%;
-        }
+        .nav-links a:hover { color: var(--accent-color); }
+        .nav-links a:hover::after { width: 60%; }
 
         .hamburger {
             display: none;
@@ -154,7 +145,7 @@
             color: var(--text-light);
         }
 
-        /* Hero Section */
+        /* Hero */
         .hero {
             min-height: 70vh;
             display: flex;
@@ -172,13 +163,13 @@
             left: -20%;
             width: 140%;
             height: 140%;
-            background: linear-gradient(45deg, rgba(255, 94, 108, 0.05), rgba(254, 179, 0, 0.05));
+            background: linear-gradient(45deg, rgba(255,94,108,0.05), rgba(254,179,0,0.05));
             animation: shift 20s infinite ease-in-out;
             z-index: 1;
         }
 
         .dark-mode .hero::before {
-            background: linear-gradient(45deg, rgba(255, 94, 108, 0.1), rgba(254, 179, 0, 0.1));
+            background: linear-gradient(45deg, rgba(255,94,108,0.1), rgba(254,179,0,0.1));
         }
 
         @keyframes shift {
@@ -206,11 +197,6 @@
             color: var(--text-dark);
             margin-bottom: 20px;
             line-height: 1.1;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .dark-mode .hero h1 {
-            color: var(--text-dark);
         }
 
         .hero p {
@@ -235,7 +221,7 @@
             color: var(--text-dark);
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 -2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 -2px 10px rgba(0,0,0,0.05);
         }
 
         .cta-button::before {
@@ -245,28 +231,184 @@
             left: 50%;
             width: 0;
             height: 0;
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255,255,255,0.4);
             border-radius: 50%;
             transform: translate(-50%, -50%);
             transition: width 0.4s ease, height 0.4s ease;
         }
 
-        .cta-button:hover::before {
-            width: 200%;
-            height: 200%;
-        }
-
-        .dark-mode .cta-button {
-            color: var(--text-light);
-        }
-
+        .cta-button:hover::before { width: 200%; height: 200%; }
+        .dark-mode .cta-button { color: var(--text-light); }
         .cta-button:hover {
             transform: translateY(-4px) scale(1.02);
             box-shadow: var(--shadow-glow);
             background: var(--secondary-color);
         }
 
-        /* Featured Recipes */
+        /* Dashboard */
+        .dashboard {
+            padding: 60px;
+            background: var(--background-dark);
+        }
+
+        .dashboard-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 0 auto 40px;
+        }
+
+        .dash-card {
+            flex: 1;
+            min-width: 250px;
+            background: var(--background-light);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow-glow);
+            text-align: center;
+        }
+
+        .dark-mode .dash-card {
+            background: var(--background-light);
+        }
+
+        .dash-card .label {
+            color: var(--text-light);
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .dash-card .value {
+            font-size: 64px;
+            font-weight: 800;
+            margin: 10px 0;
+            line-height: 1;
+        }
+
+        .dash-card .badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .bmi-bar-wrap {
+            margin-top: 20px;
+        }
+
+        .bmi-bar-bg {
+            background: #f0f0f0;
+            border-radius: 10px;
+            height: 12px;
+            position: relative;
+        }
+
+        .bmi-bar-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .bmi-bar-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 6px;
+        }
+
+        .quick-links a {
+            display: block;
+            background: var(--background-dark);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            text-align: left;
+        }
+
+        .quick-links a:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .alert-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin: 0 auto 30px;
+            max-width: 1100px;
+        }
+
+        .alert-box a { color: #e67e22; font-weight: 600; }
+
+        /* Recommended Meals */
+        .recommended {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .recommended h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        .meal-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .meal-card {
+            width: 190px;
+            background: var(--background-light);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-glow);
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: transform 0.2s ease;
+        }
+
+        .meal-card:hover { transform: translateY(-5px); }
+
+        .meal-card .meal-type {
+            font-size: 11px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .meal-card h4 {
+            font-size: 15px;
+            margin: 8px 0;
+        }
+
+        .meal-card .diet {
+            font-size: 12px;
+            color: #27ae60;
+        }
+
+        .meal-card .cost {
+            font-size: 13px;
+            color: #e74c3c;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        /* Featured */
         .featured {
             padding: 60px;
             background: var(--background-light);
@@ -281,9 +423,7 @@
             position: relative;
         }
 
-        .dark-mode .featured h2 {
-            color: var(--secondary-color);
-        }
+        .dark-mode .featured h2 { color: var(--secondary-color); }
 
         .featured h2::after {
             content: '';
@@ -314,20 +454,13 @@
             overflow: hidden;
             box-shadow: var(--shadow-glow);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
         }
 
-        .dark-mode .card {
-            background: var(--background-dark);
-        }
+        .dark-mode .card { background: var(--background-dark); }
 
         .card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(255, 94, 108, 0.3);
-        }
-
-        .dark-mode .card:hover {
-            box-shadow: 0 15px 40px rgba(255, 94, 108, 0.4);
+            box-shadow: 0 15px 40px rgba(255,94,108,0.3);
         }
 
         .card img {
@@ -337,9 +470,7 @@
             transition: transform 0.5s ease;
         }
 
-        .card:hover img {
-            transform: scale(1.05);
-        }
+        .card:hover img { transform: scale(1.05); }
 
         .card .content {
             padding: 20px;
@@ -357,12 +488,8 @@
             margin-bottom: 8px;
         }
 
-        .card p {
-            color: var(--text-light);
-            font-size: 0.95rem;
-        }
+        .card p { color: var(--text-light); font-size: 0.95rem; }
 
-        /* Footer */
         .footer {
             background: var(--background-dark);
             color: var(--text-light);
@@ -370,17 +497,10 @@
             text-align: center;
         }
 
-        .footer p {
-            margin: 0;
-            font-size: 0.9rem;
-        }
+        .footer p { margin: 0; font-size: 0.9rem; }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
-            .navbar {
-                padding: 15px 20px;
-            }
-
+            .navbar { padding: 15px 20px; }
             .nav-links {
                 display: none;
                 flex-direction: column;
@@ -388,58 +508,17 @@
                 top: 100%;
                 left: 0;
                 width: 100%;
-                background: rgba(255, 245, 215, 0.95);
+                background: rgba(255,245,215,0.95);
                 padding: 20px;
                 text-align: center;
             }
-
-            .dark-mode .nav-links {
-                background: rgba(0, 0, 0, 0.95);
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .hamburger {
-                display: block;
-            }
-
-            .hero {
-                padding: 80px 20px 30px;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .featured {
-                padding: 40px 20px;
-            }
-
-            .card-container {
-                gap: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .cta-button {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
-
-            .card h3 {
-                font-size: 1.3rem;
-            }
-
-            .card p {
-                font-size: 0.85rem;
-            }
-
-            .card img {
-                height: 180px;
-            }
+            .dark-mode .nav-links { background: rgba(0,0,0,0.95); }
+            .nav-links.active { display: flex; }
+            .hamburger { display: block; }
+            .hero { padding: 80px 20px 30px; }
+            .cta-buttons { flex-direction: column; gap: 10px; }
+            .featured { padding: 40px 20px; }
+            .dashboard { padding: 40px 20px; }
         }
     </style>
 </head>
@@ -449,7 +528,8 @@
         <img src="{% static 'demo/images/loogo.png' %}" alt="Logo" class="logo">
         <div class="nav-links">
             <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'signup' %}">Sign Up</a>
+            <a href="{% url 'recipe_list' %}">Meals</a>
+            <a href="{% url 'user_profile' %}">Profile</a>
             <a href="{% url 'feedback_page' %}">Feedback</a>
             {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}">Logout</a>
@@ -465,18 +545,90 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Namaste Indians!</h1>
-            <p>We are here to add nutrition to your life. Join us to explore affordable, personalized meal plans tailored just for you!</p>
+            <h1>Welcome back, {{ username }} 👋</h1>
+            <p>Here's your personalized health & nutrition dashboard</p>
             <div class="cta-buttons">
-                <a href="{% url 'recipe_list' %}" class="cta-button cta-primary">Explore Meals</a>
+                <a href="{% url 'recipe_list' %}" class="cta-button">Explore Meals</a>
             </div>
         </div>
     </section>
 
-    <!-- Featured Recipes Section -->
+    <!-- Dashboard -->
+    <section class="dashboard">
+
+        {% if not profile_exists %}
+        <div class="alert-box">
+            ⚠️ Your profile is incomplete. <a href="{% url 'user_profile' %}">Complete your profile</a> to see your BMI, calorie target, and personalized meal recommendations.
+        </div>
+        {% else %}
+
+        <div class="dashboard-grid">
+
+            <!-- BMI Card -->
+            <div class="dash-card">
+                <div class="label">Your BMI</div>
+                <div class="value" style="color: {{ bmi_color }};">{{ bmi }}</div>
+                <span class="badge" style="background: {{ bmi_color }};">{{ bmi_category }}</span>
+                <div class="bmi-bar-wrap">
+                    <div class="bmi-bar-bg">
+                        <div class="bmi-bar-fill" style="
+                            background: {{ bmi_color }};
+                            width: {% if bmi < 18.5 %}20%{% elif bmi < 25 %}45%{% elif bmi < 30 %}70%{% else %}90%{% endif %};
+                        "></div>
+                    </div>
+                    <div class="bmi-bar-labels">
+                        <span>Underweight</span>
+                        <span>Normal</span>
+                        <span>Overweight</span>
+                        <span>Obese</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calories Card -->
+            <div class="dash-card">
+                <div class="label">Daily Calorie Target</div>
+                <div class="value" style="color: #8e44ad;">{{ calories }}</div>
+                <span class="badge" style="background: #8e44ad;">kcal / day</span>
+                <p style="color: var(--text-light); font-size: 13px; margin-top: 20px;">
+                    Based on moderate activity level
+                </p>
+            </div>
+
+            <!-- Quick Actions Card -->
+            <div class="dash-card quick-links" style="text-align:left;">
+                <div class="label" style="margin-bottom:15px;">Quick Actions</div>
+                <a href="{% url 'recipe_list' %}">🍽️ Browse All Meals</a>
+                <a href="{% url 'user_profile' %}">👤 Update Profile</a>
+                <a href="{% url 'feedback_page' %}">💬 Give Feedback</a>
+            </div>
+
+        </div>
+
+        <!-- Recommended Meals -->
+        <div class="recommended">
+            <h3>Recommended For You 🥗</h3>
+            <div class="meal-grid">
+                {% for meal in recommended_meals %}
+                <a href="{% url 'recipe_detail' meal.id %}" class="meal-card">
+                    <div class="meal-type">{{ meal.meal_type }}</div>
+                    <h4>{{ meal.name }}</h4>
+                    <div class="diet">{{ meal.diet_suitability }}</div>
+                    <div class="cost">₹{{ meal.total_cost }}</div>
+                </a>
+                {% empty %}
+                <p style="color: var(--text-light);">No recommendations yet. Update your profile for personalized suggestions.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% endif %}
+    </section>
+
+    <!-- Featured Recipes -->
     <section class="featured">
         <h2>Featured Recipes</h2>
         <div class="card-container">
@@ -509,9 +661,7 @@
         <p>© 2024 LowPoceat. All rights reserved.</p>
     </footer>
 
-    <!-- JavaScript -->
     <script>
-        // Function to apply dark mode state
         function applyDarkMode(isDark) {
             const body = document.body;
             const toggleButton = document.querySelector('.dark-mode-toggle');
@@ -525,39 +675,28 @@
             localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
         }
 
-        // Initialize dark mode on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const isDarkModeEnabled = localStorage.getItem('darkMode') === 'enabled';
-            applyDarkMode(isDarkModeEnabled);
+        document.addEventListener('DOMContentLoaded', function () {
+            applyDarkMode(localStorage.getItem('darkMode') === 'enabled');
 
-            // Navbar scroll effect
-            window.addEventListener('scroll', function() {
+            window.addEventListener('scroll', function () {
                 const navbar = document.querySelector('.navbar');
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
+                if (window.scrollY > 50) navbar.classList.add('scrolled');
+                else navbar.classList.remove('scrolled');
             });
 
-            // Hamburger menu toggle
             const hamburger = document.querySelector('.hamburger');
             const navLinks = document.querySelector('.nav-links');
             if (hamburger && navLinks) {
-                hamburger.addEventListener('click', function() {
+                hamburger.addEventListener('click', function () {
                     navLinks.classList.toggle('active');
                 });
             }
 
-            // Dark mode toggle
             const darkModeToggle = document.querySelector('.dark-mode-toggle');
             if (darkModeToggle) {
-                darkModeToggle.addEventListener('click', function() {
-                    const isDark = !document.body.classList.contains('dark-mode');
-                    applyDarkMode(isDark);
+                darkModeToggle.addEventListener('click', function () {
+                    applyDarkMode(!document.body.classList.contains('dark-mode'));
                 });
-            } else {
-                console.error('Dark mode toggle button not found');
             }
         });
     </script>

@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('signup/', views.signup_view, name='signup'),
@@ -14,4 +15,15 @@ urlpatterns = [
     path('contact_us/', views.contact_us, name='contact_us'),
     path('logout/', views.logout_view, name='logout'),
     path('', views.home_view, name='root'),
+    
+    
+    # REST API endpoints
+    path('api/meals/', views.MealListAPI.as_view(), name='api_meals'),
+    path('api/profile/', views.UserProfileAPI.as_view(), name='api_profile'),
+
+    # JWT token endpoints
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
+    path('api/meals/ajax/', views.meals_ajax, name='meals_ajax'),
 ]

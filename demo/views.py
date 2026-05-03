@@ -16,6 +16,15 @@ from django.contrib.auth import logout
 from .models import Feedback
 from .forms import FeedbackForm
 
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .serializers import MealSerializer, UserProfileSerializer
+
+
+from django.http import JsonResponse
+
 def signup_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -96,8 +105,44 @@ def login_view(request):
 # Home View
 @login_required
 def home_view(request):
-    return render(request, 'demo/home.html', {'username': request.user.username})
+    bmi = None
+    bmi_category = None
+    bmi_color = None
+    calories = None
+    recommended_meals = []
 
+    try:
+        profile = UserProfile.objects.get(user=request.user)
+        if profile.weight and profile.height:
+            bmi, bmi_category, bmi_color = calculate_bmi(profile.weight, profile.height)
+            age = profile.age if profile.age else 25
+            calories = calculate_calories(profile.weight, profile.height, age)
+
+            # recommend meals based on health conditions
+            if profile.health_con.exists():
+                recommended_meals = Meal.objects.filter(
+                    health_condition_suitability__in=profile.health_con.all()
+                ).distinct()[:6]
+            else:
+                recommended_meals = Meal.objects.all()[:6]
+
+            # filter by diet preference
+            if profile.diet_pref:
+                recommended_meals = Meal.objects.filter(
+                    diet_suitability=profile.diet_pref
+                )[:6]
+    except UserProfile.DoesNotExist:
+        pass
+
+    return render(request, 'demo/home.html', {
+        'username': request.user.username,
+        'bmi': bmi,
+        'bmi_category': bmi_category,
+        'bmi_color': bmi_color,
+        'calories': calories,
+        'recommended_meals': recommended_meals,
+        'profile_exists': bmi is not None,
+    })
 # User profile view (form submission)
 @login_required
 def user_profile(request):
@@ -234,3 +279,97 @@ def contact_us(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+
+
+
+
+
+
+class MealListAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        meals = Meal.objects.all()
+        meal_type = request.query_params.get('meal_type')
+        diet = request.query_params.get('diet_suitability')
+        if meal_type:
+            meals = meals.filter(meal_type=meal_type)
+        if diet:
+            meals = meals.filter(diet_suitability=diet)
+        serializer = MealSerializer(meals, many=True)
+        return Response(serializer.data)
+
+class UserProfileAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            profile = UserProfile.objects.get(user=request.user)
+            serializer = UserProfileSerializer(profile)
+            return Response(serializer.data)
+        except UserProfile.DoesNotExist:
+            return Response({'error': 'Profile not found'}, status=404)
+        
+
+
+
+def calculate_bmi(weight, height):
+    height_m = height / 100
+    bmi = weight / (height_m ** 2)
+    bmi = round(bmi, 1)
+    if bmi < 18.5:
+        category = "Underweight"
+        color = "#3498db"
+    elif bmi < 25:
+        category = "Normal"
+        color = "#2ecc71"
+    elif bmi < 30:
+        category = "Overweight"
+        color = "#f39c12"
+    else:
+        category = "Obese"
+        color = "#e74c3c"
+    return bmi, category, color
+
+def calculate_calories(weight, height, age, gender='male'):
+    if gender == 'male':
+        bmr = 10 * weight + 6.25 * height - 5 * age + 5
+    else:
+        bmr = 10 * weight + 6.25 * height - 5 * age - 161
+    return round(bmr * 1.55)  # moderate activity        
+
+
+
+
+
+
+def meals_ajax(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    meals = Meal.objects.all()
+
+    meal_type = request.GET.get('meal_type')
+    diet = request.GET.get('diet_suitability')
+    health = request.GET.get('health_condition')
+    cost = request.GET.get('total_cost')
+    search = request.GET.get('search')
+
+    if meal_type:
+        meals = meals.filter(meal_type=meal_type)
+    if diet:
+        meals = meals.filter(diet_suitability=diet)
+    if health:
+        meals = meals.filter(health_condition_suitability__name=health)
+    if cost:
+        meals = meals.filter(total_cost__lte=float(cost))
+    if search:
+        meals = meals.filter(name__icontains=search)
+
+    data = {
+        'count': meals.count(),
+        'meals': list(meals.values('id', 'name', 'meal_type', 'diet_suitability', 'total_cost'))
+    }
+    return JsonResponse(data)
