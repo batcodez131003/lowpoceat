@@ -42,7 +42,8 @@ def signup_view(request):
             EmailVerificationCode.objects.create(user=user, code=otp)
             try:
                 send_otp_email(user, otp)
-            except Exception:
+            except Exception as e:
+                print(f"EMAIL ERROR: {type(e).__name__}: {e}")  # Debug: show actual error
                 user.delete()
                 messages.error(request, "Unable to send verification email. Please check your email settings and try again.")
                 return render(request, 'demo/signup.html', {'form': form})
