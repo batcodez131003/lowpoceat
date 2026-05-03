@@ -52,19 +52,21 @@ lowpoceat/
 ```
 ---
 Setup :
-git clone https://github.com/batcodez131003/lowpoceat.git
-cd lowpoceat
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
+- git clone https://github.com/batcodez131003/lowpoceat.git
+- cd lowpoceat
+- pip install -r requirements.txt
+- python manage.py migrate
+- python manage.py runserver
 
 
 Future Improvements :
-AI-based meal recommendations
-Weekly meal planning
-Inventory tracking
-Nutrition analytics dashboard
-PostgreSQL migration
-Author
+- AI-based meal recommendations
+- Weekly meal planning
+- Inventory tracking
+ -Nutrition analytics dashboard
+- PostgreSQL migration
 
+
+-----------
+Author
 Abrar 
